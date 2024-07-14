@@ -1,22 +1,20 @@
 package daohibernate.repo;
 
 import daohibernate.entity.Person;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
-import lombok.AllArgsConstructor;
+import daohibernate.entity.PersonId;
+import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Repository
-@AllArgsConstructor
-public class PersonRepository {
-    @PersistenceContext
-    private EntityManager entityManager;
+public interface PersonRepository extends JpaRepository<Person, PersonId> {
 
-    public List<Person> getPersonsByCity(String city) {
-        return entityManager.createQuery("from Person where city = UPPER(:city)", Person.class)
-                .setParameter("city", city)
-                .getResultList();
-    }
+
+    List<Person> findPersonByCity(String city);
+
+    List<Person> findPersonByAge(int age);
+
+    Optional<Person> findPersonByName(String name, String surname);
 }
